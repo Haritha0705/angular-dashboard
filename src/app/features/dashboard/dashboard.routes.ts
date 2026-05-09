@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const dashboardRoutes: Routes = [
   {
-    path: 'dashboard',
+    path: '',
     loadComponent: () =>
       import('./layout/dashboard-layout.component').then((m) => m.DashboardLayoutComponent),
     children: [
@@ -28,10 +28,10 @@ export const dashboardRoutes: Routes = [
       {
         path: 'projects',
         loadComponent: () =>
-          import('./pages/Analytics/analytics.component').then((m) => m.AnalyticsComponent),
+          import('./pages/projects/projects-shell.component').then((m) => m.ProjectsShellComponent),
         children: [
           {
-            path: '',
+            path: 'active',
             loadComponent: () =>
               import('./pages/projects/Active Project/active-project.component').then((m) => m.ActiveProjectComponent),
           },
