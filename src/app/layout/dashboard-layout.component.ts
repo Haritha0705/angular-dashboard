@@ -10,6 +10,7 @@ import { DashboardLayoutFacade } from './services/dashboard-layout.facade';
   imports: [RouterOutlet, SidebarComponent, TopbarComponent],
   templateUrl: 'dashboard-layout.html',
 })
+
 export class DashboardLayoutComponent {
   constructor(public facade: DashboardLayoutFacade) {}
 }
