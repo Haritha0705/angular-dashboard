@@ -6,37 +6,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   selector: 'app-projects-shell',
   imports: [RouterLink, RouterLinkActive, RouterOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-semibold text-slate-800">Projects</h1>
-      </div>
-      <nav class="flex gap-2 border-b border-slate-200">
-        <a
-          routerLink="."
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="border-blue-600 text-blue-600"
-          class="px-4 py-2 text-sm border-b-2 border-transparent text-slate-600 hover:text-slate-900"
-        >
-          Active
-        </a>
-        <a
-          routerLink="done"
-          routerLinkActive="border-blue-600 text-blue-600"
-          class="px-4 py-2 text-sm border-b-2 border-transparent text-slate-600 hover:text-slate-900"
-        >
-          Done
-        </a>
-        <a
-          routerLink="on-hold"
-          routerLinkActive="border-blue-600 text-blue-600"
-          class="px-4 py-2 text-sm border-b-2 border-transparent text-slate-600 hover:text-slate-900"
-        >
-          On Hold
-        </a>
-      </nav>
-      <router-outlet />
-    </div>
-  `,
+  templateUrl: 'projects-shell.html'
 })
+
 export class ProjectsShellComponent {}

@@ -2,19 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTreeModule } from '@angular/material/tree';
-
-interface NavItem {
-  readonly label: string;
-  readonly path: string;
-  readonly icon: string;
-}
-
-interface ProjectNode {
-  readonly label: string;
-  readonly path: string;
-  readonly icon: string;
-  readonly children?: ProjectNode[];
-}
+import { NavItem, ProjectNode } from '../models/dashboard-layout.models';
 
 @Component({
   standalone: true,

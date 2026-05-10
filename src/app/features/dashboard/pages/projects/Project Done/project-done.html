@@ -1,0 +1,26 @@
+<div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+    <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-slate-600">
+          <tr>
+            <th class="text-left px-4 py-2 font-medium">Project</th>
+            <th class="text-left px-4 py-2 font-medium">Owner</th>
+            <th class="text-left px-4 py-2 font-medium">Completed</th>
+            <th class="text-left px-4 py-2 font-medium">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-slate-700">
+          @for (p of projects; track p.name) {
+            <tr>
+              <td class="px-4 py-2">{{ p.name }}</td>
+              <td class="px-4 py-2">{{ p.owner }}</td>
+              <td class="px-4 py-2">{{ p.completed }}</td>
+              <td class="px-4 py-2">
+                <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                  Done
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+</div>
