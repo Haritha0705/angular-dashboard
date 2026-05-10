@@ -1,0 +1,88 @@
+<div class="page-header">
+  <h1>Overview</h1>
+  <p>Welcome back, Haritha — here's what's happening.</p>
+</div>
+
+<!-- Stat cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+  @if (store.loading()) {
+    @for (i of [1,2,3,4]; track i) {
+      <p-card>
+        <div class="flex items-center gap-4">
+          <p-skeleton shape="circle" size="3rem" />
+          <div class="flex-1">
+            <p-skeleton width="60%" height="2rem" styleClass="mb-2" />
+            <p-skeleton width="80%" height="1rem" />
+          </div>
+        </div>
+      </p-card>
+    }
+  } @else {
+    @for (stat of store.stats(); track stat.id) {
+      <p-card>
+        <div class="flex items-center gap-4">
+          <div class="stat-icon" [class]="stat.tone">
+            <i [class]="stat.icon === 'work' ? 'pi pi-briefcase' : stat.icon === 'check_circle' ? 'pi pi-check-circle' : stat.icon === 'group' ? 'pi pi-users' : 'pi pi-exclamation-triangle'"></i>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-heading">{{ stat.value }}</div>
+            <div class="text-xs text-muted">{{ stat.label }}</div>
+            <div class="stat-delta" [class]="stat.tone">{{ stat.delta }}</div>
+          </div>
+        </div>
+      </p-card>
+    }
+  }
+</div>
+
+<!-- Two-column content -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+  <!-- Recent activity -->
+  <p-card header="Recent Activity">
+    @if (store.loading()) {
+      <div class="flex flex-col gap-4">
+        @for (i of [1,2,3,4]; track i) {
+          <div class="flex items-center gap-3">
+            <p-skeleton shape="circle" size="1.5rem" />
+            <p-skeleton width="80%" height="1rem" />
+          </div>
+        }
+      </div>
+    } @else {
+      @for (item of store.activity(); track item.id; let last = $last) {
+        <div class="flex items-center gap-3 py-2">
+          <p-chip icon="pi pi-circle-fill" styleClass="text-xs" />
+          <span class="text-sm text-body">
+            <span class="font-semibold">{{ item.user }}</span> {{ item.action }} "{{ item.target }}"
+          </span>
+          <span class="text-xs text-muted ml-auto">{{ item.timestamp | date:'shortTime' }}</span>
+        </div>
+        @if (!last) { <p-divider /> }
+      }
+    }
+  </p-card>
+
+  <!-- My tasks -->
+  <p-card header="My Tasks">
+    @if (store.loading()) {
+      <div class="flex flex-col gap-4">
+        @for (i of [1,2,3]; track i) {
+          <div class="flex items-center gap-3">
+            <p-skeleton width="1.5rem" height="1.5rem" />
+            <p-skeleton width="60%" height="1rem" />
+          </div>
+        }
+      </div>
+    } @else {
+      @for (task of store.tasks(); track task.id) {
+        <div class="flex items-center gap-3 py-2">
+          <p-checkbox [ngModel]="task.done" (onChange)="onTaskToggle(task.id, $event)" [binary]="true" />
+          <span class="text-sm"
+                [class]="task.done ? 'line-through text-muted' : 'text-body'">
+            {{ task.label }}
+          </span>
+        </div>
+      }
+    }
+  </p-card>
+</div>

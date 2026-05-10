@@ -1,0 +1,22 @@
+<div class="page-header">
+  <h1>Inbox</h1>
+  <p>You have {{ messages.length }} messages.</p>
+</div>
+
+<p-card>
+  @for (msg of messages; track msg.subject; let last = $last) {
+    <div class="flex items-start gap-4 py-3">
+      <p-avatar [label]="msg.from.charAt(0)" shape="circle" [styleClass]="msg.unread ? 'avatar-primary' : 'avatar-muted'" />
+      <div class="flex-1 min-w-0">
+        <div class="flex justify-between items-center">
+          <span class="text-sm" [class]="msg.unread ? 'font-semibold text-heading' : 'text-body'">{{ msg.from }}</span>
+          <span class="text-xs text-muted">{{ msg.time }}</span>
+        </div>
+        <div class="text-sm font-medium text-heading mt-0.5 truncate">{{ msg.subject }}</div>
+        <div class="text-xs text-muted mt-1 leading-relaxed line-clamp-2">{{ msg.preview }}</div>
+      </div>
+      <p-button icon="pi pi-star" [rounded]="true" [text]="true" severity="secondary" size="small" />
+    </div>
+    @if (!last) { <p-divider /> }
+  }
+</p-card>

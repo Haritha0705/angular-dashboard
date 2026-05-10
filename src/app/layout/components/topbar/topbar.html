@@ -1,0 +1,17 @@
+<p-toolbar styleClass="border-0 border-b rounded-none px-6" [style]="{ 'background': 'var(--color-surface-card)', 'border-bottom': '1px solid var(--color-border)' }">
+  <ng-template #start>
+    <span class="text-lg font-semibold" style="color: var(--color-text-primary);">Dashboard</span>
+  </ng-template>
+
+  <ng-template #end>
+    <div class="flex items-center gap-3">
+      <p-iconField>
+        <p-inputIcon styleClass="pi pi-search" />
+        <input type="text" pInputText placeholder="Search..." class="!rounded-full !text-sm" />
+      </p-iconField>
+
+      <p-button icon="pi pi-bell" [rounded]="true" [text]="true" severity="secondary" pBadge value="3" />
+      <p-avatar label="H" shape="circle" styleClass="avatar-primary" />
+    </div>
+  </ng-template>
+</p-toolbar>

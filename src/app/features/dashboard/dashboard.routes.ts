@@ -1,61 +1,31 @@
 import { Routes } from '@angular/router';
+import { DashboardLayoutComponent } from '../../layout/dashboard-layout.component';
+import { OverviewComponent } from '../overview/overview.component';
+import { AnalyticsComponent } from '../analytics/analytics.component';
+import { TicketListComponent } from '../tickets/pages/ticket-list/ticket-list.component';
+import { TicketDetailComponent } from '../tickets/pages/ticket-detail/ticket-detail.component';
+import { TicketFormComponent } from '../tickets/pages/ticket-form/ticket-form.component';
+import { ProjectsComponent } from '../projects/projects.component';
+import { UsersComponent } from '../users/users.component';
+import { InboxComponent } from '../inbox/inbox.component';
+import { SettingsComponent } from '../settings/settings.component';
 
 export const dashboardRoutes: Routes = [
   {
     path: '',
-    loadComponent: () =>
-      import('./layout/dashboard-layout.component').then((m) => m.DashboardLayoutComponent),
+    component: DashboardLayoutComponent,
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
-      {
-        path: 'overview',
-        loadComponent: () =>
-          import('./pages/Overview/overview.component').then((m) => m.OverviewComponent),
-      },
-      {
-        path: 'help',
-        loadComponent: () => import('./pages/Help/help.component').then((m) => m.HelpComponent),
-      },
-      {
-        path: 'inbox',
-        loadComponent: () => import('./pages/Inbox/inbox.component').then((m) => m.InboxComponent),
-      },
-      {
-        path: 'analytics',
-        loadComponent: () =>
-          import('./pages/Analytics/analytics.component').then((m) => m.AnalyticsComponent),
-      },
-      {
-        path: 'projects',
-        loadComponent: () =>
-          import('./pages/projects/projects-shell.component').then((m) => m.ProjectsShellComponent),
-        children: [
-          {
-            path: 'active',
-            loadComponent: () =>
-              import('./pages/projects/Active Project/active-project.component').then((m) => m.ActiveProjectComponent),
-          },
-          {
-            path: 'done',
-            loadComponent: () =>
-              import('./pages/projects/Project Done/project-done.component').then(
-                (m) => m.ProjectDoneComponent,
-              ),
-          },
-          {
-            path: 'on-hold',
-            loadComponent: () =>
-              import('./pages/projects/Project On Hold/project-on-hold.component').then(
-                (m) => m.ProjectOnHoldComponent,
-              ),
-          },
-        ],
-      },
-      {
-        path: 'settings',
-        loadComponent: () =>
-          import('./pages/Settings/settings.component').then((m) => m.SettingsComponent),
-      },
-    ],
-  },
+      { path: 'overview', component: OverviewComponent },
+      { path: 'analytics', component: AnalyticsComponent },
+      { path: 'tickets', component: TicketListComponent },
+      { path: 'tickets/new', component: TicketFormComponent },
+      { path: 'tickets/:id/edit', component: TicketFormComponent },
+      { path: 'tickets/:id', component: TicketDetailComponent },
+      { path: 'projects', component: ProjectsComponent },
+      { path: 'users', component: UsersComponent },
+      { path: 'inbox', component: InboxComponent },
+      { path: 'settings', component: SettingsComponent },
+    ]
+  }
 ];

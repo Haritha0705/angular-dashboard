@@ -1,0 +1,43 @@
+<aside class="layout-sidebar" [class.collapsed]="collapsed()">
+  <!-- Logo -->
+  <div class="sidebar-header">
+    <div class="sidebar-logo">N</div>
+    <span class="sidebar-brand-text">Nextora</span>
+  </div>
+
+  <!-- Main nav -->
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">MENU</div>
+    <ul class="sidebar-nav-section">
+      @for (item of nav; track item.path) {
+        <li class="nav-item">
+          <a [routerLink]="item.path" routerLinkActive="active-link">
+            <i [class]="item.icon"></i>
+            <span class="nav-label">{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+
+    <hr class="sidebar-divider" />
+
+    <div class="nav-section-title">OTHER</div>
+    <ul class="sidebar-nav-section">
+      @for (item of bottomNav; track item.path) {
+        <li class="nav-item">
+          <a [routerLink]="item.path" routerLinkActive="active-link">
+            <i [class]="item.icon"></i>
+            <span class="nav-label">{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <!-- Toggle -->
+  <div class="sidebar-toggle-btn">
+    <button (click)="toggle.emit()">
+      <i [class]="collapsed() ? 'pi pi-angle-right' : 'pi pi-angle-left'"></i>
+    </button>
+  </div>
+</aside>

@@ -1,0 +1,127 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="page-header">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1>Tickets</h1>
+      <p>Manage and track support tickets.</p>
+    </div>
+    <p-button label="New Ticket" icon="pi pi-plus" (click)="createTicket()" />
+  </div>
+</div>
+
+<!-- Bulk Action Bar -->
+@if (store.hasSelection()) {
+  <p-toolbar styleClass="mb-4 rounded-xl">
+    <ng-template #start>
+      <span class="text-sm font-medium text-heading">{{ store.selectionCount() }} selected</span>
+    </ng-template>
+    <ng-template #end>
+      <div class="flex gap-2">
+        <p-button label="Close Selected" icon="pi pi-check" severity="success" size="small" [outlined]="true" (click)="bulkClose()" />
+        <p-button label="Delete Selected" icon="pi pi-trash" severity="danger" size="small" [outlined]="true" (click)="bulkDelete()" />
+        <p-button label="Clear" icon="pi pi-times" severity="secondary" size="small" [text]="true" (click)="store.clearSelection()" />
+      </div>
+    </ng-template>
+  </p-toolbar>
+}
+
+<p-card>
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <div class="flex flex-wrap items-center gap-3 mb-4">
+      <div class="flex-1 min-w-[200px]">
+        <input pInputText placeholder="Search tickets..." [(ngModel)]="searchText" (keyup.enter)="onSearch()" class="w-full !text-sm" />
+      </div>
+      <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="Status" [showClear]="true" (onChange)="applyFilters()" styleClass="!text-sm" />
+      <p-select [options]="priorityOptions" [(ngModel)]="selectedPriority" placeholder="Priority" [showClear]="true" (onChange)="applyFilters()" styleClass="!text-sm" />
+      <p-select [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Category" [showClear]="true" (onChange)="applyFilters()" styleClass="!text-sm" />
+      <p-select [options]="assigneeOptions" [(ngModel)]="selectedAssignee" placeholder="Assignee" [showClear]="true" (onChange)="applyFilters()" styleClass="!text-sm" />
+      <p-button icon="pi pi-filter-slash" severity="secondary" [text]="true" [rounded]="true" (click)="resetFilters()" pTooltip="Clear all filters" />
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <p-table
+    [value]="store.tickets()"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="store.pageSize()"
+    [totalRecords]="store.totalRecords()"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    (onLazyLoad)="onLazyLoad($event)"
+    [loading]="store.loading()"
+    [tableStyle]="{'min-width': '70rem'}"
+    styleClass="p-datatable-sm"
+    [rowHover]="true"
+    dataKey="id"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 3rem">
+          <p-checkbox [ngModel]="allSelected" [binary]="true" (onChange)="toggleSelectAll($event)" />
+        </th>
+        <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
+        <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
+        <th pSortableColumn="priority">Priority <p-sortIcon field="priority" /></th>
+        <th pSortableColumn="category">Category <p-sortIcon field="category" /></th>
+        <th pSortableColumn="assignedTo">Assignee <p-sortIcon field="assignedTo" /></th>
+        <th pSortableColumn="createdAt">Created <p-sortIcon field="createdAt" /></th>
+        <th style="width: 8rem">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-ticket>
+      <tr [class.selected-row]="isSelected(ticket.id)">
+        <td>
+          <p-checkbox [ngModel]="isSelected(ticket.id)" [binary]="true" (onChange)="onRowSelect(ticket.id)" />
+        </td>
+        <td>
+          <div class="flex flex-col">
+            <span class="font-semibold text-heading cursor-pointer hover:underline" (click)="viewTicket(ticket.id)">
+              {{ ticket.title }}
+            </span>
+            @if (ticket.slaBreached) {
+              <span class="text-xs" style="color: var(--color-danger-500);">⚠ SLA Breached</span>
+            }
+          </div>
+        </td>
+        <td>
+          <p-tag [value]="getStatusLabel(ticket.status)" [severity]="getStatusSeverity(ticket.status)" [rounded]="true" />
+        </td>
+        <td>
+          <p-tag [value]="getPriorityLabel(ticket.priority)" [severity]="getPrioritySeverity(ticket.priority)" [rounded]="true" />
+        </td>
+        <td>
+          <span class="text-sm text-body">{{ getCategoryLabel(ticket.category) }}</span>
+        </td>
+        <td>
+          <span class="text-sm text-body">{{ ticket.assignedTo }}</span>
+        </td>
+        <td>
+          <span class="text-xs text-muted">{{ ticket.createdAt | date:'mediumDate' }}</span>
+        </td>
+        <td>
+          <div class="flex gap-1">
+            <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="info" size="small" (click)="viewTicket(ticket.id)" />
+            <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="secondary" size="small" (click)="editTicket(ticket.id)" />
+            <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" size="small" (click)="confirmDelete(ticket.id)" />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="8">
+          <div class="flex flex-col items-center justify-center py-10 text-muted">
+            <i class="pi pi-ticket text-4xl mb-3"></i>
+            <span class="text-lg font-medium">No tickets found</span>
+            <span class="text-sm mt-1">Try adjusting your filters or create a new ticket.</span>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

@@ -1,0 +1,176 @@
+<p-toast />
+
+@if (store.loading()) {
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+      <p-card>
+        <p-skeleton width="60%" height="2rem" styleClass="mb-4" />
+        <p-skeleton width="100%" height="1rem" styleClass="mb-2" />
+        <p-skeleton width="80%" height="1rem" styleClass="mb-2" />
+        <p-skeleton width="90%" height="1rem" />
+      </p-card>
+    </div>
+    <div>
+      <p-card>
+        <p-skeleton width="100%" height="12rem" />
+      </p-card>
+    </div>
+  </div>
+} @else if (ticket) {
+  <!-- Header -->
+  <div class="flex items-center gap-3 mb-5">
+    <p-button icon="pi pi-arrow-left" [rounded]="true" [text]="true" severity="secondary" (click)="goBack()" />
+    <div class="flex-1">
+      <h1 class="text-xl font-bold text-heading m-0">{{ ticket.title }}</h1>
+      <span class="text-xs text-muted">ID: {{ ticket.id | slice:0:8 }}… · Created {{ ticket.createdAt | date:'mediumDate' }}</span>
+    </div>
+    <p-button label="Edit" icon="pi pi-pencil" [outlined]="true" size="small" (click)="editTicket()" />
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Left: Description + Activity Timeline -->
+    <div class="lg:col-span-2 flex flex-col gap-6">
+      <!-- Description -->
+      <p-card header="Description">
+        <p class="text-sm text-body leading-relaxed">{{ ticket.description }}</p>
+        @if (ticket.tags && ticket.tags.length) {
+          <div class="flex gap-2 mt-4">
+            @for (tag of ticket.tags; track tag) {
+              <p-tag [value]="tag" [rounded]="true" severity="secondary" />
+            }
+          </div>
+        }
+      </p-card>
+
+      <!-- Activity Timeline -->
+      <p-card header="Activity">
+        @if (ticket.activity && ticket.activity.length) {
+          <div class="activity-timeline">
+            @for (entry of ticket.activity; track entry.id) {
+              <div class="activity-item">
+                <div class="activity-dot" [style.background]="getActivityColor(entry.type)">
+                  <i [class]="getActivityIcon(entry.type)" style="font-size: 0.65rem; color: #fff;"></i>
+                </div>
+                <div class="activity-content">
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium text-heading">{{ entry.user }}</span>
+                    <span class="text-xs text-muted">{{ entry.timestamp | date:'short' }}</span>
+                  </div>
+                  <p class="text-sm text-body mt-0.5 m-0">{{ entry.message }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="text-sm text-muted">No activity yet.</p>
+        }
+
+        <!-- Add Comment -->
+        <p-divider />
+        <div class="flex flex-col gap-3">
+          <label class="text-sm font-medium text-heading">Add a comment</label>
+          <textarea pInputTextarea [(ngModel)]="newComment" [rows]="3" placeholder="Type your comment..." class="w-full"></textarea>
+          <div class="flex justify-end">
+            <p-button label="Post Comment" icon="pi pi-send" size="small" [disabled]="!newComment.trim()" (click)="addComment()" />
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Right: Status, Meta, Attachments -->
+    <div class="flex flex-col gap-6">
+      <!-- Status & Workflow -->
+      <p-card header="Status">
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-muted">Current Status</span>
+            <p-tag [value]="getStatusLabel(ticket.status)" [severity]="getStatusSeverity(ticket.status)" [rounded]="true" />
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-muted">Priority</span>
+            <p-tag [value]="getPriorityLabel(ticket.priority)" [severity]="getPrioritySeverity(ticket.priority)" [rounded]="true" />
+          </div>
+          @if (ticket.slaBreached) {
+            <div class="flex items-center gap-2 text-sm" style="color: var(--color-danger-500);">
+              <i class="pi pi-exclamation-triangle"></i>
+              <span class="font-medium">SLA Breached</span>
+            </div>
+          }
+
+          <!-- Workflow Buttons -->
+          @if (nextStatuses.length > 0) {
+            <p-divider />
+            <span class="text-xs font-medium text-muted uppercase">Move to</span>
+            <div class="flex flex-col gap-2">
+              @for (ns of nextStatuses; track ns) {
+                <p-button
+                  [label]="getStatusLabel(ns)"
+                  [outlined]="true"
+                  size="small"
+                  styleClass="w-full"
+                  (click)="changeStatus(ns)"
+                />
+              }
+            </div>
+          }
+        </div>
+      </p-card>
+
+      <!-- Details -->
+      <p-card header="Details">
+        <div class="flex flex-col gap-3">
+          <div class="flex justify-between">
+            <span class="text-sm text-muted">Category</span>
+            <span class="text-sm font-medium text-heading">{{ getCategoryLabel(ticket.category) }}</span>
+          </div>
+          <p-divider />
+          <div class="flex justify-between">
+            <span class="text-sm text-muted">Assigned to</span>
+            <span class="text-sm font-medium text-heading">{{ ticket.assignedTo }}</span>
+          </div>
+          <p-divider />
+          <div class="flex justify-between">
+            <span class="text-sm text-muted">Created by</span>
+            <span class="text-sm font-medium text-heading">{{ ticket.createdBy }}</span>
+          </div>
+          <p-divider />
+          <div class="flex justify-between">
+            <span class="text-sm text-muted">Response Time</span>
+            <span class="text-sm font-medium text-heading">{{ ticket.responseTime }}m</span>
+          </div>
+          <p-divider />
+          <div class="flex justify-between">
+            <span class="text-sm text-muted">Updated</span>
+            <span class="text-sm text-heading">{{ ticket.updatedAt | date:'medium' }}</span>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Attachments -->
+      <p-card header="Attachments">
+        @if (ticket.attachments && ticket.attachments.length) {
+          <div class="flex flex-col gap-2">
+            @for (file of ticket.attachments; track file.id) {
+              <div class="attachment-item">
+                <i class="pi pi-file text-primary" style="font-size: 1.25rem;"></i>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium text-heading truncate">{{ file.name }}</div>
+                  <div class="text-xs text-muted">{{ formatFileSize(file.size) }} · {{ file.uploadedBy }}</div>
+                </div>
+                <p-button icon="pi pi-download" [rounded]="true" [text]="true" severity="secondary" size="small" />
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="text-sm text-muted text-center py-4">No attachments</p>
+        }
+      </p-card>
+    </div>
+  </div>
+} @else {
+  <div class="flex flex-col items-center justify-center py-20 text-muted">
+    <i class="pi pi-ticket text-5xl mb-4"></i>
+    <span class="text-lg font-medium">Ticket not found</span>
+    <p-button label="Back to Tickets" [text]="true" (click)="goBack()" class="mt-4" />
+  </div>
+}

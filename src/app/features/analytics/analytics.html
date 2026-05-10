@@ -1,0 +1,72 @@
+<div class="page-header">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1>Analytics</h1>
+      <p>Real-time ticket metrics and trends.</p>
+    </div>
+    @if (store.lastUpdated()) {
+      <span class="text-xs text-muted">
+        Last updated: {{ store.lastUpdated() | date:'medium' }}
+      </span>
+    }
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+  @if (store.loading()) {
+    @for (i of [1,2,3,4]; track i) {
+      <p-card>
+        <div class="flex items-center gap-4">
+          <p-skeleton shape="circle" size="3rem" />
+          <div class="flex-1">
+            <p-skeleton width="60%" height="1.75rem" styleClass="mb-2" />
+            <p-skeleton width="40%" height="0.875rem" />
+          </div>
+        </div>
+      </p-card>
+    }
+  } @else {
+    @for (card of kpiCards(); track card.label) {
+      <p-card>
+        <div class="flex items-center gap-4">
+          <div class="kpi-icon" [style.background]="card.iconBg" [style.color]="card.iconColor">
+            <i [class]="card.icon"></i>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-heading">{{ card.value }}</div>
+            <div class="text-xs text-muted">{{ card.label }}</div>
+            <div class="stat-delta" [class]="card.tone">{{ card.delta }}</div>
+          </div>
+        </div>
+      </p-card>
+    }
+  }
+</div>
+
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-6">
+  <!-- Line Chart (takes 2 cols) -->
+  <div class="lg:col-span-2">
+    <p-card header="Ticket Trends — Last 30 Days">
+      @if (store.loading()) {
+        <p-skeleton width="100%" height="300px" />
+      } @else if (trendChartData()) {
+        <p-chart type="line" [data]="trendChartData()!" [options]="trendChartOptions" [style]="{ height: '300px' }" />
+      }
+    </p-card>
+  </div>
+
+  <!-- Donut Chart -->
+  <div>
+    <p-card header="By Category">
+      @if (store.loading()) {
+        <div class="flex justify-center py-8">
+          <p-skeleton shape="circle" size="200px" />
+        </div>
+      } @else if (donutChartData()) {
+        <p-chart type="doughnut" [data]="donutChartData()!" [options]="donutChartOptions" [style]="{ height: '300px' }" />
+      }
+    </p-card>
+  </div>
+</div>

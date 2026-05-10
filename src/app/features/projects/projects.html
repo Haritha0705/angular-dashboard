@@ -1,0 +1,45 @@
+<div class="page-header">
+  <h1>Projects</h1>
+  <p>Active projects across the team.</p>
+</div>
+
+<p-card>
+  <p-table 
+    [value]="store.projects()" 
+    [loading]="store.loading()"
+    [tableStyle]="{'min-width': '50rem'}" 
+    styleClass="p-datatable-sm p-datatable-gridlines" 
+    [rowHover]="true">
+    <ng-template #header>
+      <tr>
+        <th pSortableColumn="name">Project <p-sortIcon field="name" /></th>
+        <th pSortableColumn="owner">Owner <p-sortIcon field="owner" /></th>
+        <th>Progress</th>
+        <th pSortableColumn="due">Due <p-sortIcon field="due" /></th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-p>
+      <tr>
+        <td>
+          <div class="flex items-center gap-2">
+            <i class="pi pi-folder icon-primary"></i>
+            <span class="font-semibold text-heading">{{ p.name }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="flex items-center gap-2">
+            <p-avatar [label]="p.owner?.charAt(0)" shape="circle" size="normal"
+                      styleClass="avatar-primary-soft" />
+            <span>{{ p.owner }}</span>
+          </div>
+        </td>
+        <td style="min-width:180px;">
+          <p-progressBar [value]="p.progress" [showValue]="true" />
+        </td>
+        <td>
+          <p-tag [value]="(p.due | date:'mediumDate') || ''" severity="info" [rounded]="true" />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

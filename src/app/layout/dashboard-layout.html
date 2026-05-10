@@ -1,0 +1,10 @@
+<div class="layout-wrapper">
+  <app-sidebar [collapsed]="facade.collapsed()" (toggle)="facade.toggleSidebar()" />
+
+  <div class="layout-main">
+    <app-topbar />
+    <main class="layout-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>
