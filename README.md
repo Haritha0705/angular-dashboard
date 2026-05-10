@@ -1,59 +1,91 @@
-# AngularDashboard
+# Angular Dashboard
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.10.
+## Project Overview
 
-## Development server
+A high-performance, enterprise-ready Angular application providing a comprehensive dashboard interface. This system is architected utilizing modern Angular (v21) paradigms, the PrimeNG component library, and TailwindCSS utility styling. The project emphasizes scalability, maintainability, and advanced reactive state management.
 
-To start a local development server, run:
+## Key Features & Capabilities
 
-```bash
-ng serve
+*   **Signal-Driven Architecture:** Implements a highly reactive and performant state management system utilizing Angular Signals to minimize reactivity overhead and ensure predictable data flows.
+*   **Dynamic Data Simulation:** Incorporates a robust mock API layer capable of simulating real-world server responses, including network latency, complex dataset generation, server-side pagination, and complex data mutations.
+*   **Analytics Interface:** Features interactive, highly customizable data visualizations integrated via Chart.js.
+*   **Advanced Data Management:** Comprehensive PrimeNG data tables supporting server-side pagination simulations, advanced filtering, bulk actions, and integrated activity tracking for detailed record views.
+*   **Modular Feature Sets:** Architected into dedicated feature modules encompassing Overview, Projects, Users, Tickets, Inbox, Notifications, and Settings.
+*   **Scalable Design System:** Utilizes a unified CSS variable system working in tandem with TailwindCSS to provide consistent styling and seamless theme management.
+
+## Technology Stack
+
+*   **Core Framework:** Angular 21
+*   **Component Library:** PrimeNG 21
+*   **Styling Engine:** TailwindCSS 4
+*   **Data Visualization:** Chart.js
+*   **Testing Framework:** Vitest
+*   **Data Mocking:** Faker.js
+
+## Architecture Overview
+
+### State Management
+The application's core state is handled through a localized, signal-based approach. Rather than relying on monolithic global stores, state is scoped to individual feature modules (e.g., Tickets, Users, Projects). This localized store pattern reduces coupling, improves testing isolation, and simplifies the developer experience while ensuring high performance.
+
+### Data Mocking Strategy
+To enable rapid UI/UX development and comprehensive component testing independent of backend availability, the project utilizes a sophisticated mock service layer. Leveraging `@faker-js/faker`, it provides structurally accurate mock data that simulates the exact contracts expected from production APIs.
+
+## Directory Structure
+
+```text
+src/app/
+├── core/           # Application-wide singletons, interceptors, and core services
+├── features/       # Independent feature modules (Analytics, Dashboard, Projects, etc.)
+│   ├── tickets/    # Standard feature module implementation
+│   │   ├── components/
+│   │   ├── services/
+│   │   └── store/  # Signal-based localized state store
+├── layout/         # Structural layout components (Sidebar, Topbar)
+├── shared/         # Reusable UI components, directives, and custom pipes
+└── store/          # Cross-cutting global state management
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Environment Setup
 
-## Code scaffolding
+### Prerequisites
+*   Node.js (v18.0.0 or later recommended)
+*   npm (v10.0.0 or later)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Installation Instructions
 
+1.  Clone the repository:
+    ```bash
+    git clone <repository-url>
+    cd angular-dashboard
+    ```
+
+2.  Install project dependencies:
+    ```bash
+    npm install
+    ```
+
+## Development Commands
+
+Start the local development server:
 ```bash
-ng generate component component-name
+npm run start
+```
+The application will be accessible at `http://localhost:4200/` and will automatically recompile and reload upon saving modifications to the source files.
+
+## Testing Strategy
+
+Execute the unit test suite utilizing the Vitest runner:
+```bash
+npm run test
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Build & Deployment
 
+Compile the application for production deployment:
 ```bash
-ng generate --help
+npm run build
 ```
+This command generates an optimized, minified production build located in the `dist/` directory, ready to be served by any static file server or web hosting platform.
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## License
+This project is licensed under the MIT License.
