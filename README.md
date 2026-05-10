@@ -1,5 +1,7 @@
 # NexaDesk
 
+![NexaDesk Dashboard Preview](https://plain-apac-prod-public.komododecks.com/202605/10/F8alOzwDxWHFq1Tcgh83/image.png)
+
 ## Project Overview
 
 NexaDesk is a fully-featured, production-grade IT Service Management (ITSM) frontend application built with modern Angular (v21+) and PrimeNG. Designed to replicate the complexity of real enterprise platforms like ServiceNow and Jira, it demonstrates advanced Angular architecture, state management, real-time UI patterns, and enterprise-level component design — all powered by a robust mock API with zero backend dependency.
