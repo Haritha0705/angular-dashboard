@@ -13,4 +13,5 @@ import { InputIconModule } from 'primeng/inputicon';
   imports: [ToolbarModule, ButtonModule, InputTextModule, AvatarModule, BadgeModule, IconFieldModule, InputIconModule],
   templateUrl: 'topbar.html',
 })
+    
 export class TopbarComponent {}

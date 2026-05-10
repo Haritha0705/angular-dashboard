@@ -8,6 +8,7 @@ import { DASHBOARD_NAV, DASHBOARD_BOTTOM_NAV } from '../../config/dashboard-nav.
   imports: [RouterLink, RouterLinkActive],
   templateUrl: 'sidebar.html',
 })
+    
 export class SidebarComponent {
   collapsed = input(false);
   toggle = output<void>();
